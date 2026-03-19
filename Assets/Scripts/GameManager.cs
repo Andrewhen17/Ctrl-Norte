@@ -10,6 +10,8 @@ public class GameManager : MonoBehaviour
     private List<string> pedido = new List<string>();
     private List<string> jugador = new List<string>();
 
+    private List<string> ingredientesDisponibles = new List<string> { "queso", "pepperoni", "jamon", "aceitunas", "pimientos" };
+    List<string> copiaIngredientesDisponibles = new List<string>();
     void Awake()
     {
         if (textoPedido == null)
@@ -28,15 +30,29 @@ public class GameManager : MonoBehaviour
         GenerarPedido();
     }
 
+    void RandomIngredientes()
+    {
+        pedido.Clear();
+        
+        int numeroIngredientes = Random.Range(1, Mathf.Min(5, ingredientesDisponibles.Count + 1));
+
+        List<string> copiaIngredientesDisponibles = new List<string>(ingredientesDisponibles);
+        for (int i = 0; i < numeroIngredientes; i++)
+        {
+            int indice = Random.Range(0, copiaIngredientesDisponibles.Count);
+            pedido.Add(copiaIngredientesDisponibles[indice]);
+            copiaIngredientesDisponibles.RemoveAt(indice);
+        }
+        
+    }
     void GenerarPedido()
     {
         pedido.Clear();
-        pedido.Add("queso");
-        pedido.Add("pepperoni");
+        RandomIngredientes();
 
         if (textoPedido != null)
         {
-            textoPedido.text = "Pedido: queso + pepperoni";
+            textoPedido.text = "Pedido: " + string.Join(", ", pedido);
         }
     }
 
@@ -62,11 +78,11 @@ public class GameManager : MonoBehaviour
 
         if (Comparar())
         {
-            resultado.text = "✅ Correcto";
+            resultado.text = " Correcto";
         }
         else
         {
-            resultado.text = "❌ Incorrecto";
+            resultado.text = " Incorrecto";
         }
 
         jugador.Clear();
