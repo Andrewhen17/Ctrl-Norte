@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using Unity.VisualScripting;
 
 public class GameManager : MonoBehaviour
 {
@@ -45,7 +46,7 @@ public class GameManager : MonoBehaviour
         }
         
     }
-    void GenerarPedido()
+    public void GenerarPedido()
     {
         pedido.Clear();
         RandomIngredientes();
@@ -54,7 +55,9 @@ public class GameManager : MonoBehaviour
         {
             textoPedido.text = "Pedido: " + string.Join(", ", pedido);
         }
+       
     }
+     
 
     public void AgregarQueso()
     {
