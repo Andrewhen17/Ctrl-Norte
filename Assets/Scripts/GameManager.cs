@@ -1,18 +1,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-using Unity.VisualScripting;
+using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour
 {
     public TextMeshProUGUI textoPedido;
     public TextMeshProUGUI resultado;
+    public TextMeshProUGUI puntajeText;
 
     private List<string> pedido = new List<string>();
     private List<string> jugador = new List<string>();
 
     private List<string> ingredientesDisponibles = new List<string> { "queso", "pepperoni", "jamon", "aceitunas", "pimientos" };
-    List<string> copiaIngredientesDisponibles = new List<string>();
+
+    private int puntajeActual = 0;
+
     void Awake()
     {
         if (textoPedido == null)
@@ -29,6 +32,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         GenerarPedido();
+        ActualizarPuntajeUI();
     }
 
     void RandomIngredientes()
@@ -79,7 +83,9 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        if (Comparar())
+        bool esCorrecto = Comparar();
+
+        if (esCorrecto)
         {
             resultado.text = " Correcto";
         }
@@ -88,7 +94,10 @@ public class GameManager : MonoBehaviour
             resultado.text = " Incorrecto";
         }
 
+        AjustarPuntaje(esCorrecto);
         jugador.Clear();
+        GenerarPedido();
+        Debug.Log("Se ha generado un nuevo pedido al picarle servir");
     }
 
     bool Comparar()
@@ -103,4 +112,27 @@ public class GameManager : MonoBehaviour
 
         return true;
     }
+
+    void AjustarPuntaje(bool esCorrecto)
+    {
+        if (esCorrecto)
+        {
+            puntajeActual += 10;
+        }
+        else
+        {
+            puntajeActual -= 5;
+        }
+
+        ActualizarPuntajeUI();
+    }
+
+    void ActualizarPuntajeUI()
+    {
+        if (puntajeText != null)
+        {
+            puntajeText.text = "Puntaje: " + puntajeActual;
+        }
+    }
+
 }
